@@ -1,11 +1,9 @@
-import logging
-import os
 from abc import ABC, abstractmethod
 from pyspark.sql.dataframe import DataFrame
 from pyspark.sql import SparkSession
 
 
-class ETLData(ABC):
+class Etl(ABC):
     def __init__(self, spark: SparkSession):
         self.spark = spark
     
@@ -20,3 +18,8 @@ class ETLData(ABC):
     @abstractmethod
     def load(self, df: DataFrame) -> None:
         pass
+    
+    def run(self):
+        df = self.extract()
+        df_transformed = self.transform(df)
+        self.load(df_transformed)
