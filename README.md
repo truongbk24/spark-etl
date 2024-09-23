@@ -60,7 +60,7 @@ To run locally, you need:
         + SEND_EMAIL_TO=your_email@gmail.com # the mail use to receive email notification
 6. [DBeaver] (https://dbeaver.io) The tool to connect to clickhouse data analytics.
 
-Clone the repo and run the following commands to start building the pipeline":
+Clone the repo and run the following commands to start building the pipeline:
 
 ```bash
 git clone https://github.com/truongbk24/spark-etl/
@@ -79,6 +79,10 @@ Go to http://localhost:10001/login to connect to the minio storage within the us
 Go to http://localhost:8082 to connect to the Airflow within the username/password: airflow/airflow. The dag was created, click on the dag: clickhouse_spark_dag to see the graph dependencies
 
 ![airflow dag](./asset/images/airflow_dag.png)
+
+Go back to http://localhost:8081 to connect to the spark cluster to see the list of spark jobs has been submitted and finished
+
+![spark](./asset/images/spark_cluster.png)
 
 Trigger the dag manually to run the ETL pipeline to load data from mysql, mongodb to minio, and load to clickhouse tables. If the data quality check failed then it will send the email notifications
 
