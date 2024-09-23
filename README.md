@@ -50,15 +50,16 @@ To run locally, you need:
 3. [Docker](https://docs.docker.com/engine/install/) with at least 6GB of RAM and [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
 4. [Make Utility] https://www.gnu.org/software/make/
 5. Change a couple of things before proceeding to next building steps:
-    -  In the main folder, open the file .env, change variable to match your environment
-        GMAIL_USER = "your_email@gmail.com" # the gmail use as smtp to send email notification
-        GMAIL_PASSWORD="your_password" # the normal password to login, if you're using 2FA for gmail, follow this link to create the app password [Gmail password] (https://support.google.com/mail/answer/185833?hl=en)
-        SEND_EMAIL = "your_email@gmail.com" # the mail use to receive email notification
+    -  In the main folder, open the file .env, change variable to match your environment:
+        + GMAIL_USER = "your_email@gmail.com" # the gmail use as smtp to send email notification
+        + GMAIL_PASSWORD="your_password" # the normal password to login, if you're using 2FA for gmail, follow this link to create the app password [Gmail password] (https://support.google.com/mail/answer/185833?hl=en)
+        + SEND_EMAIL = "your_email@gmail.com" # the mail use to receive email notification
     -  In the folder container\airflow, open the file Dockerfile, change variable to match your environment
-        AIRFLOW__SMTP__SMTP_USER = "your_email@gmail.com" # the gmail use as smtp to send email notification
-        AIRFLOW__SMTP__SMTP_PASSWORD="your_password" # the normal password to login, if you're using 2FA for gmail, follow this link to create the app password [Gmail password] (https://support.google.com/mail/answer/185833?hl=en)
-        SEND_EMAIL_TO=your_email@gmail.com # the mail use to receive email notification
-6. [DBeaver] (https://dbeaver.io) The tool to connect to clickhouse data analytics
+        + AIRFLOW__SMTP__SMTP_USER = "your_email@gmail.com" # the gmail use as smtp to send email notification
+        + AIRFLOW__SMTP__SMTP_PASSWORD="your_password" # the normal password to login, if you're using 2FA for gmail, follow this link to create the app password [Gmail password] (https://support.google.com/mail/answer/185833?hl=en)
+        + SEND_EMAIL_TO=your_email@gmail.com # the mail use to receive email notification
+6. [DBeaver] (https://dbeaver.io) The tool to connect to clickhouse data analytics.
+
 Clone the repo and run the following commands to start building the pipeline":
 
 ```bash
