@@ -29,5 +29,5 @@ Submit the Spark job within spark-submit command, 3 parameters need to be provid
 - source_name: The database name associated within the source_type
 - source_table: The table you want to extract and load
 
-spark-submit --packages src/main.py --source_type "mongodb" --source_name "crm" --table_name "customer"
+spark-submit src/main.py --source_type "mongodb" --source_name "crm" --table_name "customer"
 
