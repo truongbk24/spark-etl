@@ -19,7 +19,10 @@ We splitted the project into different layer as below
 
 ## How to run the spark job
 
-Prerequisite: The vault secret for each type. Take a look at file script.sh at folder container\vault.
+Prerequisite: 
+ - The vault secret for each type. Take a look at file script.sh at folder container\vault.
+ - Python
+ - Run to install the requirement: python install -r requirements.txt
 
 Submit the Spark job within spark-submit command, 3 parameters need to be provided:
 - source_type: The source type of the source table, for example: mongodb, jdbc_mysql, jdbc_oracle,...

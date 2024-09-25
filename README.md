@@ -59,6 +59,7 @@ To run locally, you need:
         + AIRFLOW__SMTP__SMTP_PASSWORD="your_password" # the normal password to login, if you're using 2FA for gmail, follow this link to create the app password [Gmail password] (https://support.google.com/mail/answer/185833?hl=en)
         + SEND_EMAIL_TO=your_email@gmail.com # the mail use to receive email notification
 6. [DBeaver] (https://dbeaver.io) The tool to connect to clickhouse data analytics.
+7. [Maven] (https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-bundle/1.11.901) Because of the limitation of Github file to be uploaded less than 100MB, you need to download this jdk libraries and put this jar file in the folder container/airflow/lib
 
 Clone the repo and run the following commands to start building the pipeline:
 
@@ -91,6 +92,10 @@ Trigger the dag manually to run the ETL pipeline to load data from mysql, mongod
 Go back to http://localhost:10001/login to connect to the minio storage within the username/password: minioadmin/minioadmin. The bucket has been filled with data as parquet file
 
 ![minio](./asset/images/minio_storage_data.png)
+
+If the source has the problem with pre-defined data quality rules, it will send an alert email
+
+![great expectation](./asset/images/great_expectation_failed.png)
 
 Use the DBeaver tools to connect to Clickhouse (http://localhost:8123) within the username/password: admin/admin. List the database and tables was created by dag and dbt job
 
