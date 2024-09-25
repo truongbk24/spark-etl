@@ -14,6 +14,9 @@ class Etl(ABC):
     @abstractmethod
     def transform(self, df: DataFrame) -> DataFrame:
         pass
+    @abstractmethod
+    def validate(self, df: DataFrame):
+        pass
     
     @abstractmethod
     def load(self, df: DataFrame) -> None:
@@ -21,5 +24,7 @@ class Etl(ABC):
     
     def run(self):
         df = self.extract()
+        result = self.validate(df)
+        print(result)
         df_transformed = self.transform(df)
         self.load(df_transformed)

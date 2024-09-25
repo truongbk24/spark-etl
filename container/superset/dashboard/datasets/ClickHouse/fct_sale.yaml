@@ -1,0 +1,240 @@
+table_name: fct_sale
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: datamart
+sql: "select f.category_key,f.customer_key,f.date_key as date_key,f.total_volume,f.total_amount,c.description,d.date,d.year,d.month,d.day_of_month,d.day_of_week,d.day_of_year,d.week,d.is_weekend,d.quarter,d.year_month,d.year_week\n\
+  from datamart.fct_sale f inner join datamart.dim_date d on f.date_key=d.date_key\n\
+  \                          inner join datamart.dim_category c on f.category_key=c.category_key"
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+uuid: d5f199f1-0940-40cf-a21b-9bf2a3fd8645
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra:
+    warning_markdown: ''
+  warning_text: null
+columns:
+- column_name: date_key
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: NULLABLE(UINT64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: total_amount
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: FLOAT64
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: total_volume
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT64
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: customer_key
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: description
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: f.category_key
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: day_of_year
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT16
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: year
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT16
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: day_of_week
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: day_of_month
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: is_weekend
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: quarter
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: week
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: month
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: date
+  verbose_name: null
+  is_dttm: true
+  is_active: true
+  type: DATE
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: year_week
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: year_month
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+version: 1.0.0
+database_uuid: 890d4b53-515f-4aff-8086-e7d88bd811e6

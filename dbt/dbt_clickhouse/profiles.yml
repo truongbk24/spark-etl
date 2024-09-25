@@ -1,0 +1,23 @@
+clickhouse_dbt:
+  target: dev
+  outputs:
+    raw:
+      type: clickhouse
+      schema: raw # ClickHouse schema (often "default")
+      host: "{{ env_var('CLICKHOUSE_HOST', 'localhost') }}" # ClickHouse host address
+      port: 8123  # Default port for ClickHouse HTTP
+      user: "{{ env_var('CLICKHOUSE_USER') }}"  # Your ClickHouse username
+      password: "{{ env_var('CLICKHOUSE_PASSWORD') }}"   # Your ClickHouse password
+      database: "raw"  # ClickHouse database name
+      retries: 5  # Optional, number of retries in case of failure   
+    datamart:
+      type: clickhouse
+      schema: datamart  # ClickHouse schema (often "default")
+      host: "{{ env_var('CLICKHOUSE_HOST', 'localhost') }}" # ClickHouse host address
+      port: 8123  # Default port for ClickHouse HTTP
+      user: "{{ env_var('CLICKHOUSE_USER') }}"  # Your ClickHouse username
+      password: "{{ env_var('CLICKHOUSE_PASSWORD') }}"   # Your ClickHouse password
+      database: "datamart"  # ClickHouse database name
+      retries: 5  # Optional, number of retries in case of failure
+    
+

@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: dim_category
+    columns:
+      - name: category_key
+        data_type: String
+        tests:
+          - unique
+          - not_null
+      - name: description
+        data_type: Nullable(String)
+        tests:
+          - unique
+          - not_null
+          - accepted_values:
+              values: ['Grocery Shopping', 'Restaurant', 'Electronics Purchase', 'Clothing']

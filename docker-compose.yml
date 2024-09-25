@@ -1,0 +1,259 @@
+version: '3.7'
+x-spark-common:
+  &spark-common
+  build:
+    context: ./container/spark/
+
+x-airflow-common:
+  &airflow-common
+  build:
+    context: ./container/airflow/
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+    AIRFLOW_CONN_POSTGRES_DEFAULT: postgres://airflow:airflow@postgres:5433/airflow
+  volumes:
+    - ./container/airflow/dags:/opt/airflow/dags
+    - ./container/airflow/logs:/opt/airflow/logs
+    - ./container/airflow/plugins:/opt/airflow/plugins
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+x-superset-common:
+  &superset-common
+  build:
+    context: ./container/superset/
+
+networks:
+  mynetwork:
+    driver: bridge
+
+services:
+  postgres:
+      container_name: postgres
+      image: postgres:16
+      environment:
+        POSTGRES_USER: airflow
+        POSTGRES_PASSWORD: airflow
+        POSTGRES_DB: airflow      
+      healthcheck:
+        test: [ "CMD", "pg_isready", "-U", "airflow" ]
+        interval: 5s
+        retries: 5
+      restart: always
+      networks:
+      - mynetwork
+      ports:
+        - "5433:5432"
+
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: webserver
+    command: webserver
+    ports:
+      - 8082:8080
+    networks:
+      - mynetwork
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost:8080/health"
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: scheduler
+    command: scheduler
+    networks:
+      - mynetwork
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"'
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    networks:
+      - mynetwork
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+    command: ["python", "/opt/airflow/setup_conn.py"]
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    user: '101:101'
+    container_name: clickhouse
+    hostname: clickhouse
+    environment:
+      - CLICKHOUSE_USER=admin        # Set your custom username
+      - CLICKHOUSE_PASSWORD=admin    # Set your custom password
+    volumes:
+      - ./container/clickhouse/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ./container/clickhouse/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+      - ./container/clickhouse/fs/volumes/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+    depends_on:
+      - minio
+      - createbuckets
+    networks:
+      - mynetwork
+
+  superset:
+    <<: *superset-common
+    container_name: superset
+    ports:
+      - "8088:8088"  # UI port
+    networks:
+      - mynetwork
+    depends_on:
+      - clickhouse
+
+  spark-master:
+    <<: *spark-common
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_HOST=spark-master
+      - SPARK_DRIVER_MEMORY=2g  # Optional, to set driver memory
+    ports:
+      - "8081:8080"  # Spark Master Web UI
+      - "7077:7077"  # Spark Master Port
+    networks:
+      - mynetwork
+    command: >
+      bash -c "/opt/bitnami/spark/sbin/start-master.sh"
+
+  spark-worker-1:
+    <<: *spark-common
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=4G
+    networks:
+      - mynetwork
+    command: ["/opt/bitnami/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+
+  spark-worker-2:
+    <<: *spark-common
+    container_name: spark-worker-2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=4G
+    networks:
+      - mynetwork
+    command: ["/opt/bitnami/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    hostname: minio
+    command: server --address 0.0.0.0:10000 --console-address 0.0.0.0:10001 /data
+    ports:
+      - '10000:10000'
+      - '10001:10001'
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    networks:
+      - mynetwork
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:10000 minioadmin minioadmin;
+      /usr/bin/mc admin info myminio;
+      /usr/bin/mc mb myminio/dp-source;
+      /usr/bin/mc policy set public myminio/dp-source;      
+      "
+    networks:
+      - mynetwork
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./container/mongodb/init.js:/docker-entrypoint-initdb.d/init.js
+      - ./container/mongodb/mongod.conf:/etc/mongod.conf
+    restart: unless-stopped
+    networks:
+      - mynetwork
+  gen-data-script:
+    build:
+      context: ./container/mongodb
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - mongodb
+  
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: sap
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./container/mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - mynetwork
+  vault:
+    image: vault:1.13.3
+    container_name: vault
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "root"
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - "8200:8200"
+    networks:
+      - mynetwork
+  add-kv-script:
+    build:
+      context: ./container/vault
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - vault
+volumes:
+  mongo_data:
+  mysql-data:
+  vault-data:

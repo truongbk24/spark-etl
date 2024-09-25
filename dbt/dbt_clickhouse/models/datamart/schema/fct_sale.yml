@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: fct_sale
+    columns:
+      - name: category_key
+        data_type: String
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_category')
+              field: category_key
+      - name: customer_key
+        data_type: String
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: date_key
+        data_type: Nullable(UInt64)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key

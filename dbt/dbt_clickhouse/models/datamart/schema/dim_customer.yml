@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: dim_customer
+    columns:
+      - name: customer_key
+        data_type: String
+        tests:
+          - unique
+          - not_null
+      - name: code
+        data_type: Nullable(String)
+        tests:
+          - unique
+          - not_null
+      - name: name
+        data_type: Nullable(String)
+        tests:
+          - not_null
+      - name: email
+        data_type: Nullable(String)
+        tests:
+          - not_null
+          - unique
+      - name: source
+        data_type: Nullable(String)
+        tests:
+          - not_null

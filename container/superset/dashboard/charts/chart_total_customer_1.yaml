@@ -1,0 +1,49 @@
+slice_name: chart_total_customer
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 1__table
+  viz_type: big_number_total
+  slice_id: 1
+  metric:
+    aggregate: SUM
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: total_volume
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 4
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: UINT64
+      type_generic: 0
+      verbose_name: null
+      warning_markdown: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: false
+    label: SUM(total_volume)
+    optionName: metric_vu8jqyglr3t_8c4pgtksb5t
+    sqlExpression: null
+  adhoc_filters: []
+  header_font_size: 0.6
+  subheader_font_size: 0.2
+  y_axis_format: SMART_NUMBER
+  currency_format: {}
+  time_format: smart_date
+  conditional_formatting: []
+  extra_form_data: {}
+  dashboards:
+  - 1
+query_context: '{"datasource":{"id":1,"type":"table"},"force":false,"queries":[{"filters":[],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":[],"metrics":[{"aggregate":"SUM","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"total_volume","description":null,"expression":null,"filterable":true,"groupby":true,"id":4,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"UINT64","type_generic":0,"verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":false,"label":"SUM(total_volume)","optionName":"metric_vu8jqyglr3t_8c4pgtksb5t","sqlExpression":null}],"annotation_layers":[],"series_limit":0,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{}}],"form_data":{"datasource":"1__table","viz_type":"big_number_total","slice_id":1,"metric":{"aggregate":"SUM","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"total_volume","description":null,"expression":null,"filterable":true,"groupby":true,"id":4,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"UINT64","type_generic":0,"verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":false,"label":"SUM(total_volume)","optionName":"metric_vu8jqyglr3t_8c4pgtksb5t","sqlExpression":null},"adhoc_filters":[],"header_font_size":0.6,"subheader_font_size":0.2,"y_axis_format":"SMART_NUMBER","currency_format":{},"time_format":"smart_date","conditional_formatting":[],"extra_form_data":{},"dashboards":[1],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 337f7cb1-848d-4ce2-ac1c-fbbe5276be79
+version: 1.0.0
+dataset_uuid: d5f199f1-0940-40cf-a21b-9bf2a3fd8645

@@ -8,7 +8,7 @@ This project was done for demostration loading data through a couple of layers a
 Assume that we need to ingest data from multiple source into data platform, process the data. Here are the tech stack for this demo:
 
 1. **`Apache Spark`**: Extract and load the data from sources to data storage
-2. **`Great Expectations`**: Framework integrate with Apache Spark for checking data quality for datafrom loading from sources
+2. **`Great Expectations`**: Framework integrate with Apache Spark for checking data quality for data loading from sources
 3. **`HashiCorp Vault`**: Save the secrets by key, value such as: host, port, username, password
 4. **`Minio`**: Data store to store the data as file
 5. **`Dbt (Data Build Tool)`**: The transformation tool for processing data

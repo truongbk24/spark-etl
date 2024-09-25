@@ -1,15 +1,11 @@
-import os
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
+load_dotenv('/opt/airflow/.env')
 
-RDBMS_USER= os.environ['RDBMS_USER']
-RDBMS_PASSWORD= os.environ['RDBMS_PASSWORD']
-RDBMS_DRIVER_NAME= os.environ['RDBMS_DRIVER_NAME']
-RDBMS_URL= os.environ['RDBMS_URL']
+VAULT_ADDR = os.getenv('VAULT_ADDR')
+VAULT_TOKEN = os.getenv('VAULT_TOKEN')
 
-RDBMS_CONNECTION_PROPERTIES = {
-    'driver': RDBMS_DRIVER_NAME,
-    'user': RDBMS_USER,
-    'password': RDBMS_PASSWORD
-}
+GMAIL_USER = os.getenv('GMAIL_USER')
+GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
+SEND_EMAIL = os.getenv('SEND_EMAIL')
